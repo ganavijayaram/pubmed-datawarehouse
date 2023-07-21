@@ -1,4 +1,4 @@
-# Pubmed_DataWarehouse
+# pubmed_dataWarehouse
 
 ![Datawarehouse](DataWarehouse.png)
 
