@@ -1,0 +1,44 @@
+    <!ELEMENT PubmedArticleSet (PubmedArticle+)>
+    <!ELEMENT PubmedArticle (Article)>
+    <!ATTLIST PubmedArticle PMID CDATA #REQUIRED>
+    <!-- Article 
+            @Journal name of the journal
+            @Language language in which the article is published
+            @ArticleTitle title of the article
+            @AuthorList list of all the authors that wrote this article
+            @root PubmedArticle
+        -->
+    <!ELEMENT Article (Journal, Language*, ArticleTitle, AuthorList*)>
+    <!-- Journal -->
+    <!ELEMENT Journal (ISSN*, JournalIssue, Title, ISOAbbreviation)>
+    <!ELEMENT ISSN (#PCDATA)>
+    <!ATTLIST ISSN IssnType CDATA #REQUIRED>
+    <!ELEMENT JournalIssue (Volume*, Issue*, PubDate)>
+    <!ATTLIST JournalIssue CitedMedium CDATA #REQUIRED>
+    <!ELEMENT Volume (#PCDATA)>
+    <!ELEMENT Issue (#PCDATA)>
+    <!ELEMENT PubDate (MedlineDate*, Year*, Month*, Day*, Season*)>
+    <!ELEMENT MedlineDate (#PCDATA)>
+    <!ELEMENT Year (#PCDATA)>
+    <!ELEMENT Month (#PCDATA)>
+    <!ELEMENT Day (#PCDATA)>
+    <!ELEMENT Season (#PCDATA)>
+
+    <!ELEMENT Title (#PCDATA)>
+    <!ELEMENT ISOAbbreviation (#PCDATA)>
+    <!-- Language -->
+    <!ELEMENT Language (#PCDATA)>
+    <!-- Article Title -->
+    <!ELEMENT ArticleTitle (#PCDATA)>
+    
+    <!ELEMENT AuthorList (Author+)>
+    <!ATTLIST AuthorList CompleteYN CDATA #REQUIRED>
+    <!ELEMENT Author (LastName?, ForeName?, Initials*, Suffix*, AffiliationInfo*, CollectiveName*)>
+    <!ATTLIST Author ValidYN CDATA #REQUIRED>
+    <!ELEMENT LastName (#PCDATA)>
+    <!ELEMENT ForeName (#PCDATA)>
+    <!ELEMENT Initials (#PCDATA)>
+    <!ELEMENT Suffix (#PCDATA)>
+    <!ELEMENT AffiliationInfo (Affiliation)>
+    <!ELEMENT Affiliation (#PCDATA)>
+    <!ELEMENT CollectiveName (#PCDATA)>

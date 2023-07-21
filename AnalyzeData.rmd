@@ -1,0 +1,78 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+#Importing the libraries
+library(RMySQL)
+library(dplyr)
+library(sqldf)
+
+db_user <- 'root'
+db_password <- 'Rohit@hooda1999'
+db_name <- 'datawarehouse'
+db_host <- '127.0.0.1'
+db_port <- 3306
+
+mySQLDB <- dbConnect(MySQL(), user = db_user, password = db_password, 
+                     dbname = db_name, host = db_host, port = db_port)
+
+```
+
+#### What the are number of articles published in every journal between the time period  1975 and 1977?
+According to the pubmed database having a sample size of 30 thousand articles; we have analysed that a maximum numbers of articles were published in the year 1976.In the year 1975, there were 3320 articles published in different medical journals. This increased almost 3 fold in the year 1976 taking the total numbers of articles published in that year to 10132. 
+
+Moreover, a marginal decrease in the number of articles published in the year 1977 was observed.
+```{sql connection = mySQLDB}
+SELECT COUNT(ArticleId) as NumberOfArticlePerJournal, 
+year 
+From JournalFact
+where year BETWEEN 1975 AND 1977
+Group by year
+```
+
+#### What are the number of articles published in every journal in each quarter of 1975 and 1976?
+In the year 1975, there were a maximum number of article in the journal "Annales de l'anesthesiologie francaise" for the year 1975. However, the exact quarter in which these articles were published is not know. There were as many as 201 articles published in "Journal of pharmacy and pharmacology" in the last quarter.
+
+Moreover, there was clear trend observed across all the years that the number of articles published in the last quarter i.e. 4 is the greatest.
+
+```{sql connection = mySQLDB}
+SELECT COUNT(ArticleId) as NumberOfArticlePerJournal, quater, year 
+From JournalFact 
+WHERE year BETWEEN 1975 AND 1976
+Group by year, quater
+```
+
+#### How many articles were published each quarter (across all years)?
+The third quarter had the maximum number of articles i.e. 6156 articles published across the span of four years (i.e. from 1975 to 1979). There were over 5500 articles for which the data for exact qurater of the publication was missing. So we have decided to put a Sentinel qurater which means that the data was not found for those many number of articles. 
+
+```{sql connection = mySQLDB}
+SELECT COUNT(ArticleId) as NumberOfArticlePerJournal, 
+quater From JournalFact Group by quater
+```
+
+
+### Top ten authors with the most publications.
+```{sql connection = mySQLDB }
+SELECT Lastname, Forename
+FROM AuthorFact
+GROUP BY ArticleId
+ORDER BY COUNT(*) DESC
+LIMIT 10
+```
+The author that wrote the most number of authors was Ursea. After Ursea author Miller was had the second most highest number of articles published across all the span of 4 years (i.e. 1975-1979).
+
+### Number of articles per journal per year broken down by quarter
+```{sql connection = mySQLDB}
+SELECT title, quater, year, COUNT(ArticleId) as NumberOfArticlePerJournal 
+From JournalFact 
+Group by title,year, quater
+ORDER BY year, quater
+```
+The journal "Annales de l'anesthesiologie francaise" had the maximum number of articles published for the quarter 1 and quarter 3 of year 1975. However, this changed and for the quarter 4 the journal "The Journal of pharmacy and pharmacology" had a whooping four time more number of articles compared to the "Annales de l'anesthesiologie francaise" journal. 
+
+The journal "Biochimica et biophysica acta" had the most number of articles for all the quarters of year 1976. There were as many as 196 articles in the journal "Comparative biochemistry and physiology. A, Comparative physiology" for which the exact quater of publishing was not know.
+
+For the year 1977 the journal "Biochimica et biophysica acta" had the most number of articles for the quarter 1. However, this trend was broken and for the quater 2 of year 1977 "The Journal of biological chemistry" had the maximum number of articles published for that quarter.
+
